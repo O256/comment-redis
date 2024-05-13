@@ -362,7 +362,7 @@ int ll2string(char *dst, size_t dstlen, long long svalue) {
     }
 
     /* Converts the unsigned long long value to string*/
-    int length = ull2string(dst, dstlen, value);
+    int length = ull2string(dst, dstlen, value); // 将无符号长整型转换为字符串
     if (length == 0) return 0;
     return length + negative;
 
@@ -381,6 +381,7 @@ err:
  * novel approach but only publicizes an already used technique):
  *
  * https://www.facebook.com/notes/facebook-engineering/three-optimization-tips-for-c/10151361643253920 */
+ // 将无符号长整型转换为字符串； q：算法是？ a：参考上面的链接, 采用的是一种双指针的方式, 从后往前遍历, 每次处理两个数字, 通过查表的方式将数字转换为字符串, 从而提高效率, 但是这种方式只适用于无符号长整型
 int ull2string(char *dst, size_t dstlen, unsigned long long value) {
     static const char digits[201] =
         "0001020304050607080910111213141516171819"
@@ -390,29 +391,29 @@ int ull2string(char *dst, size_t dstlen, unsigned long long value) {
         "8081828384858687888990919293949596979899";
 
     /* Check length. */
-    uint32_t length = digits10(value);
+    uint32_t length = digits10(value); // 计算数字的位数
     if (length >= dstlen) goto err;;
 
     /* Null term. */
     uint32_t next = length - 1;
     dst[next + 1] = '\0';
-    while (value >= 100) {
-        int const i = (value % 100) * 2;
-        value /= 100;
-        dst[next] = digits[i + 1];
-        dst[next - 1] = digits[i];
+    while (value >= 100) { // 处理两个数字
+        int const i = (value % 100) * 2; // 通过查表的方式将数字转换为字符串
+        value /= 100; // 除以100
+        dst[next] = digits[i + 1]; // 个位
+        dst[next - 1] = digits[i]; // 十位
         next -= 2;
     }
 
     /* Handle last 1-2 digits. */
-    if (value < 10) {
-        dst[next] = '0' + (uint32_t) value;
+    if (value < 10) { // 处理最后一个数字
+        dst[next] = '0' + (uint32_t) value; // 个位
     } else {
-        int i = (uint32_t) value * 2;
+        int i = (uint32_t) value * 2; // 通过查表的方式将数字转换为字符串
         dst[next] = digits[i + 1];
         dst[next - 1] = digits[i];
     }
-    return length;
+    return length; // 返回数字的位数
 err:
     /* force add Null termination */
     if (dstlen > 0)
@@ -432,6 +433,7 @@ err:
  * Because of its strictness, it is safe to use this function to check if
  * you can convert a string into a long long, and obtain back the string
  * from the number without any loss in the string representation. */
+// 将字符串转换为长整型
 int string2ll(const char *s, size_t slen, long long *value) {
     const char *p = s;
     size_t plen = 0;
@@ -1129,7 +1131,7 @@ int fsyncFileDir(const char *filename) {
         errno = save_errno;
         return -1;
     }
-    
+
     close(dir_fd);
     return 0;
 }

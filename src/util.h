@@ -48,7 +48,7 @@
 #define MAX_D2STRING_CHARS 128
 
 /* Bytes needed for long -> str + '\0' */
-#define LONG_STR_SIZE      21
+#define LONG_STR_SIZE      21 /* -9223372036854775808 to 9223372036854775807 */
 
 /* long double to string conversion options */
 typedef enum {

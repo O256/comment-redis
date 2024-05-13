@@ -130,6 +130,7 @@ static inline void *ztrymalloc_usable_internal(size_t size, size_t *usable) {
 #endif
 }
 
+// 和zmalloc_usable的区别是这个函数返回的usable是一个指针，而zmalloc_usable是一个值
 void *ztrymalloc_usable(size_t size, size_t *usable) {
     size_t usable_size = 0;
     void *ptr = ztrymalloc_usable_internal(size, &usable_size);
@@ -155,14 +156,16 @@ void *ztrymalloc(size_t size) {
 
 /* Allocate memory or panic.
  * '*usable' is set to the usable size if non NULL. */
+
+// 分配内存
 void *zmalloc_usable(size_t size, size_t *usable) {
     size_t usable_size = 0;
     void *ptr = ztrymalloc_usable_internal(size, &usable_size);
     if (!ptr) zmalloc_oom_handler(size);
-#ifdef HAVE_MALLOC_SIZE
-    ptr = extend_to_usable(ptr, usable_size);
+#ifdef HAVE_MALLOC_SIZE // q: 这个是什么意思？a: 这个是一个宏定义，用来判断是否有malloc_size这个函数
+    ptr = extend_to_usable(ptr, usable_size); // q: 这个函数是干什么的？a: 这个函数是用来扩展内存的
 #endif
-    if (usable) *usable = usable_size;
+    if (usable) *usable = usable_size; // q: 这个是什么意思？a: 这个是用来返回分配的内存大小的
     return ptr;
 }
 
@@ -650,7 +653,7 @@ int zmalloc_get_allocator_info(size_t *allocated,
 }
 
 void set_jemalloc_bg_thread(int enable) {
-    /* let jemalloc do purging asynchronously, required when there's no traffic 
+    /* let jemalloc do purging asynchronously, required when there's no traffic
      * after flushdb */
     char val = !!enable;
     je_mallctl("background_thread", NULL, 0, &val, 1);

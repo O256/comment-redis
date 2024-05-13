@@ -1,4 +1,5 @@
 /* zmalloc - total amount of allocated memory aware version of malloc()
+* 统计已分配内存的malloc()版本
  *
  * Copyright (c) 2009-2010, Salvatore Sanfilippo <antirez at gmail dot com>
  * All rights reserved.
