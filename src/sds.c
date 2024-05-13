@@ -1203,6 +1203,8 @@ int hex_digit_to_int(char c)
  * quotes or closed quotes followed by non space characters
  * as in: "foo"bar or "foo'
  */
+// 该函数分割一个字符串为多个参数，每个参数可以是编程语言REPL-alike形式，返回一个sds字符串数组，argc是参数个数
+// 具体形式如下：foo bar "newline are supported\n" and "\xff\x00otherstuff"
 sds *sdssplitargs(const char *line, int *argc)
 {
     const char *p = line;
@@ -1236,7 +1238,7 @@ sds *sdssplitargs(const char *line, int *argc)
 
                         byte = (hex_digit_to_int(*(p + 2)) * 16) +
                                hex_digit_to_int(*(p + 3));
-                        current = sdscatlen(current, (char *)&byte, 1);
+                        current = sdscatlen(current, (char *)&byte, 1); // 将16进制字符转换为int
                         p += 3;
                     }
                     else if (*p == '\\' && *(p + 1))
@@ -1369,6 +1371,7 @@ err:
  *
  * The function returns the sds string pointer, that is always the same
  * as the input pointer since no resize is needed. */
+// 该函数的作用是将sds字符串s中的from中的字符替换为to中的字符
 sds sdsmapchars(sds s, const char *from, const char *to, size_t setlen)
 {
     size_t j, i, l = sdslen(s);
@@ -1389,6 +1392,7 @@ sds sdsmapchars(sds s, const char *from, const char *to, size_t setlen)
 
 /* Join an array of C strings using the specified separator (also a C string).
  * Returns the result as an sds string. */
+// 该函数的作用是将一个C字符串数组使用指定的分隔符连接起来，返回一个sds字符串
 sds sdsjoin(char **argv, int argc, char *sep)
 {
     sds join = sdsempty();
@@ -1404,6 +1408,7 @@ sds sdsjoin(char **argv, int argc, char *sep)
 }
 
 /* Like sdsjoin, but joins an array of SDS strings. */
+// 该函数的作用是将一个sds字符串数组使用指定的分隔符连接起来，返回一个sds字符串
 sds sdsjoinsds(sds *argv, int argc, const char *sep, size_t seplen)
 {
     sds join = sdsempty();
@@ -1433,6 +1438,8 @@ void sds_free(void *ptr) { s_free(ptr); }
  * Template variables are specified using curly brackets, e.g. {variable}.
  * An opening bracket can be quoted by repeating it twice.
  */
+// 该函数的作用是根据模板字符串template，将模板字符串中的变量替换为实际的值，返回一个新的sds字符串
+// 具体的替换规则由cb_func函数实现
 sds sdstemplate(const char *template, sdstemplate_callback_t cb_func, void *cb_arg)
 {
     sds res = sdsempty();
@@ -1458,7 +1465,7 @@ sds sdstemplate(const char *template, sdstemplate_callback_t cb_func, void *cb_a
         sv++;
         if (!*sv)
             goto error; /* Premature end of template */
-        if (*sv == '{')
+        if (*sv == '{') // 如果是{{，就跳过
         {
             /* Quoted '{' */
             p = sv + 1;
@@ -1474,13 +1481,13 @@ sds sdstemplate(const char *template, sdstemplate_callback_t cb_func, void *cb_a
         /* Pass variable name to callback and obtain value. If callback failed,
          * abort. */
         sds varname = sdsnewlen(sv, ev - sv);
-        sds value = cb_func(varname, cb_arg);
-        sdsfree(varname);
+        sds value = cb_func(varname, cb_arg); // 根据变量名获取变量的值
+        sdsfree(varname); // 释放变量名
         if (!value)
             goto error;
 
         /* Append value to result and continue */
-        res = sdscat(res, value);
+        res = sdscat(res, value); // 将变量的值追加到结果字符串
         sdsfree(value);
         p = ev + 1;
     }
