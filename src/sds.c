@@ -1108,6 +1108,7 @@ sds sdscatrepr(sds s, const char *p, size_t len)
  * that is compatible with sdssplitargs(). For this reason, also spaces will be
  * treated as needing an escape.
  */
+// 该函数作用是判断一个sds字符串s是否包含转义字符
 int sdsneedsrepr(const sds s)
 {
     size_t len = sdslen(s);
@@ -1126,6 +1127,7 @@ int sdsneedsrepr(const sds s)
 
 /* Helper function for sdssplitargs() that returns non zero if 'c'
  * is a valid hex digit. */
+// 判断一个c是否是16进制字符
 int is_hex_digit(char c)
 {
     return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||
@@ -1134,6 +1136,7 @@ int is_hex_digit(char c)
 
 /* Helper function for sdssplitargs() that converts a hex digit into an
  * integer from 0 to 15 */
+// 将16进制的字符转换为int
 int hex_digit_to_int(char c)
 {
     switch (c)
@@ -1200,7 +1203,6 @@ int hex_digit_to_int(char c)
  * quotes or closed quotes followed by non space characters
  * as in: "foo"bar or "foo'
  */
-//
 sds *sdssplitargs(const char *line, int *argc)
 {
     const char *p = line;
