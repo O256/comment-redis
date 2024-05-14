@@ -33,68 +33,71 @@
 
 /* Node, List, and Iterator are the only data structures used currently. */
 
+// 链表节点
 typedef struct listNode {
-    struct listNode *prev;
-    struct listNode *next;
-    void *value;
-} listNode;
+    struct listNode *prev; // 前一个节点
+    struct listNode *next; // 后一个节点
+    void *value; // 节点的值
+} listNode; // 链表节点
 
+// 链表的迭代器
 typedef struct listIter {
     listNode *next;
-    int direction;
+    int direction; // 迭代器的方向
 } listIter;
 
+// 链表结构
 typedef struct list {
-    listNode *head;
-    listNode *tail;
-    void *(*dup)(void *ptr);
-    void (*free)(void *ptr);
-    int (*match)(void *ptr, void *key);
-    unsigned long len;
-} list;
+    listNode *head; // 头节点
+    listNode *tail; // 尾节点
+    void *(*dup)(void *ptr); // 复制函数
+    void (*free)(void *ptr); // 释放函数
+    int (*match)(void *ptr, void *key); // 匹配函数
+    unsigned long len; // 链表长度
+} list; // 链表
 
 /* Functions implemented as macros */
-#define listLength(l) ((l)->len)
-#define listFirst(l) ((l)->head)
-#define listLast(l) ((l)->tail)
-#define listPrevNode(n) ((n)->prev)
-#define listNextNode(n) ((n)->next)
-#define listNodeValue(n) ((n)->value)
+#define listLength(l) ((l)->len) // 获取链表长度
+#define listFirst(l) ((l)->head) // 获取链表头节点
+#define listLast(l) ((l)->tail) // 获取链表尾节点
+#define listPrevNode(n) ((n)->prev) // 获取前一个节点
+#define listNextNode(n) ((n)->next) // 获取后一个节点
+#define listNodeValue(n) ((n)->value) // 获取节点的值
 
-#define listSetDupMethod(l,m) ((l)->dup = (m))
-#define listSetFreeMethod(l,m) ((l)->free = (m))
-#define listSetMatchMethod(l,m) ((l)->match = (m))
+#define listSetDupMethod(l,m) ((l)->dup = (m)) // 设置复制函数
+#define listSetFreeMethod(l,m) ((l)->free = (m)) // 设置释放函数
+#define listSetMatchMethod(l,m) ((l)->match = (m)) // 设置匹配函数
 
-#define listGetDupMethod(l) ((l)->dup)
-#define listGetFreeMethod(l) ((l)->free)
-#define listGetMatchMethod(l) ((l)->match)
+#define listGetDupMethod(l) ((l)->dup) // 获取复制函数
+#define listGetFreeMethod(l) ((l)->free) // 获取释放函数
+#define listGetMatchMethod(l) ((l)->match) // 获取匹配函数
 
 /* Prototypes */
-list *listCreate(void);
-void listRelease(list *list);
-void listEmpty(list *list);
-list *listAddNodeHead(list *list, void *value);
-list *listAddNodeTail(list *list, void *value);
-list *listInsertNode(list *list, listNode *old_node, void *value, int after);
-void listDelNode(list *list, listNode *node);
-listIter *listGetIterator(list *list, int direction);
-listNode *listNext(listIter *iter);
-void listReleaseIterator(listIter *iter);
-list *listDup(list *orig);
-listNode *listSearchKey(list *list, void *key);
-listNode *listIndex(list *list, long index);
-void listRewind(list *list, listIter *li);
-void listRewindTail(list *list, listIter *li);
-void listRotateTailToHead(list *list);
-void listRotateHeadToTail(list *list);
-void listJoin(list *l, list *o);
-void listInitNode(listNode *node, void *value);
-void listLinkNodeHead(list *list, listNode *node);
-void listLinkNodeTail(list *list, listNode *node);
-void listUnlinkNode(list *list, listNode *node);
+list *listCreate(void); // 创建链表
+void listRelease(list *list); // 释放链表
+void listEmpty(list *list); // 清空链表
+list *listAddNodeHead(list *list, void *value); // 在链表头部添加节点
+list *listAddNodeTail(list *list, void *value); // 在链表尾部添加节点
+list *listInsertNode(list *list, listNode *old_node, void *value, int after); // 在指定节点后或前插入节点
+void listDelNode(list *list, listNode *node); // 删除节点
+listIter *listGetIterator(list *list, int direction); // 获取迭代器
+listNode *listNext(listIter *iter); // 获取迭代器的下一个节点
+void listReleaseIterator(listIter *iter); // 释放迭代器
+list *listDup(list *orig); // 复制链表
+listNode *listSearchKey(list *list, void *key); // 查找节点
+listNode *listIndex(list *list, long index); // 获取指定索引的节点
+void listRewind(list *list, listIter *li); // 重置迭代器
+void listRewindTail(list *list, listIter *li); // 重置迭代器
+void listRotateTailToHead(list *list); // 将尾节点移动到头节点
+void listRotateHeadToTail(list *list); // 将头节点移动到尾节点
+void listJoin(list *l, list *o); // 合并两个链表
+void listInitNode(listNode *node, void *value); // 初始化节点
+void listLinkNodeHead(list *list, listNode *node); // 将节点链接到头节点
+void listLinkNodeTail(list *list, listNode *node); // 将节点链接到尾节点
+void listUnlinkNode(list *list, listNode *node); // 将节点从链表中移除
 
 /* Directions for iterators */
-#define AL_START_HEAD 0
-#define AL_START_TAIL 1
+#define AL_START_HEAD 0 // 迭代器的方向
+#define AL_START_TAIL 1 // 迭代器的方向
 
 #endif /* __ADLIST_H__ */
