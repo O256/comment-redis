@@ -27,6 +27,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+// 该文件主要是定义了一些宏，用于支持一些特性，如_LARGEFILE_SOURCE、_FILE_OFFSET_BITS等
+
 #ifndef _REDIS_FMACRO_H
 #define _REDIS_FMACRO_H
 
@@ -63,6 +65,7 @@
  * NOTE: We do not use the poison pragma since it
  * will error on stdlib definitions in files as well*/
 #if (__GNUC__ && __GNUC__ >= 4) && !defined __APPLE__
+// __attribute__ ((deprecated)) 是 GCC 的特性，用于标记某个函数已经被废弃
 int sprintf(char *str, const char *format, ...) __attribute__((deprecated("please avoid use of unsafe C functions. prefer use of snprintf instead")));
 char *strcpy(char *restrict dest, const char *src) __attribute__((deprecated("please avoid use of unsafe C functions. prefer use of redis_strlcpy instead")));
 char *strcat(char *restrict dest, const char *restrict src) __attribute__((deprecated("please avoid use of unsafe C functions. prefer use of redis_strlcat instead")));
@@ -70,6 +73,7 @@ char *strcat(char *restrict dest, const char *restrict src) __attribute__((depre
 
 #ifdef __linux__
 /* features.h uses the defines above to set feature specific defines.  */
+// features.h 是一个系统头文件，用于设置一些特性相关的宏定义
 #include <features.h>
 #endif
 
