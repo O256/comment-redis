@@ -1334,20 +1334,20 @@ struct sharedObjectsStruct {
 
 /* ZSETs use a specialized version of Skiplists */
 typedef struct zskiplistNode {
-    sds ele;
-    double score;
-    struct zskiplistNode *backward;
+    sds ele; /* member data */
+    double score; /* member score */
+    struct zskiplistNode *backward; /* backward link */
     struct zskiplistLevel {
-        struct zskiplistNode *forward;
-        unsigned long span;
-    } level[];
-} zskiplistNode;
+        struct zskiplistNode *forward; /* forward link */
+        unsigned long span; /* length of span */
+    } level[]; /* levels */
+} zskiplistNode; /* skip list node */
 
-typedef struct zskiplist {
-    struct zskiplistNode *header, *tail;
-    unsigned long length;
-    int level;
-} zskiplist;
+typedef struct zskiplist { /* skip list */
+    struct zskiplistNode *header, *tail; /* header and tail pointers */
+    unsigned long length; /* number of nodes */
+    int level; /* current level */
+} zskiplist; /* skip list */
 
 typedef struct zset {
     dict *dict;

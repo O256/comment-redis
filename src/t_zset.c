@@ -117,10 +117,11 @@ void zslFree(zskiplist *zsl) {
     zfree(zsl);
 }
 
-/* Returns a random level for the new skiplist node we are going to create.
- * The return value of this function is between 1 and ZSKIPLIST_MAXLEVEL
- * (both inclusive), with a powerlaw-alike distribution where higher
- * levels are less likely to be returned. */
+/*
+    * 返回一个随机值，用于决定新节点的层数
+    * 返回值在 1 和 ZSKIPLIST_MAXLEVEL 之间（包含这两个值）
+    * 返回值的分布类似于幂律分布，即越高的层级越不可能被返回
+*/ 
 int zslRandomLevel(void) {
     static const int threshold = ZSKIPLIST_P*RAND_MAX;
     int level = 1;
@@ -129,9 +130,11 @@ int zslRandomLevel(void) {
     return (level<ZSKIPLIST_MAXLEVEL) ? level : ZSKIPLIST_MAXLEVEL;
 }
 
-/* Insert a new node in the skiplist. Assumes the element does not already
- * exist (up to the caller to enforce that). The skiplist takes ownership
- * of the passed SDS string 'ele'. */
+/*
+    * 将一个新节点添加到跳跃表
+    * 假设元素不存在（调用者需要保证这一点）
+    * 跳跃表会获取传入的 SDS 字符串 ele 的所有权
+*/ 
 zskiplistNode *zslInsert(zskiplist *zsl, double score, sds ele) {
     zskiplistNode *update[ZSKIPLIST_MAXLEVEL], *x;
     unsigned long rank[ZSKIPLIST_MAXLEVEL];

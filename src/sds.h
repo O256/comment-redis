@@ -43,8 +43,9 @@ extern const char *SDS_NOINIT;
 // sds是一个字符串结构体，包含了字符串的长度、容量、类型等信息
 typedef char *sds;
 
-/* Note: sdshdr5 is never used, we just access the flags byte directly.
- * However is here to document the layout of type 5 SDS strings. */
+/* 注意：sdshdr5 并没有被使用，我们直接访问flags字节 
+    但是这里用来记录类型5 SDS字符串的布局
+*/
 struct __attribute__ ((__packed__)) sdshdr5 {
     unsigned char flags; /* 3 lsb of type, and 5 msb of string length */
     char buf[];
