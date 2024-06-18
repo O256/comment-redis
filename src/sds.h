@@ -45,6 +45,7 @@ typedef char *sds;
 
 /* 注意：sdshdr5 并没有被使用，我们直接访问flags字节 
     但是这里用来记录类型5 SDS字符串的布局
+    __attribute__ ((__packed__)) 使用该属性可以使得变量或者结构体成员使用最小的对齐方式，即对变量是一字节对齐，对域（field）是位对齐。
 */
 struct __attribute__ ((__packed__)) sdshdr5 {
     unsigned char flags; /* 3 lsb of type, and 5 msb of string length */
